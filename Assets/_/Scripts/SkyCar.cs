@@ -5,7 +5,9 @@ using UnityEngine;
 public class SkyCar : MonoBehaviour {
 
 	[SerializeField] int speed;
-	public Transform target;
+    [SerializeField] int speedRotation= 5;
+    int marcha = 1;
+    public Transform target;
 
 	void Start () {
 
@@ -14,22 +16,34 @@ public class SkyCar : MonoBehaviour {
 	
 	void Update () {
 
-		transform.position += Vector3.forward * Time.deltaTime * speed;
+		transform.Translate(Vector3.forward * Time.deltaTime * speed *marcha);
+        if (marcha == -1)
+        {
+            transform.Rotate(Vector3.up * Time.deltaTime * speedRotation);
+        }
 	}
 
-	void OnTriggerEnter (Collider other)
+	/*void OnTriggerEnter (Collider other)
 	{
 		if (other.gameObject.tag == "Target")
 		{
 			transform.position += Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
 		}
-	}
+	}*/
 
 	void OnCollisionEnter (Collision collision)
 	{
-		if (collision.gameObject.tag == "Target")
+		if (collision.gameObject.tag == "Pared")
 		{
-			speed = 0;
+            marcha = marcha * -1;
 		}
-	}
+        if (collision.gameObject.tag == "Target")
+        {
+            //he encontrado el objetivo
+            Debug.Log("Jorge.P ha encontrado el objetivo");
+            marcha = 0;
+
+        }
+
+    }
 }
